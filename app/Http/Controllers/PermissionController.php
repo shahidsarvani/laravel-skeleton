@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +17,8 @@ class RoleController extends Controller
     public function index()
     {
         //
-        $roles = Role::all();
-        return view('roles.index', compact('roles'));
+        $permissions = Permission::all();
+        return view('permissions.index', compact('permissions'));
     }
 
     /**
@@ -29,8 +29,8 @@ class RoleController extends Controller
     public function create()
     {
         //
-        $permissions = Permission::all();
-        return view('roles.create', compact('permissions'));
+        $roles = Role::all();
+        return view('permissions.create', compact('roles'));
     }
 
     /**
@@ -42,29 +42,29 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         //
-        // return ;
+        // return $request;
         try {
-            $role = Role::create([
+            $permission = Permission::create([
                 'name' => $request->name,
                 'guard_name' => 'web'
             ]);
-            if(!empty($request->permissions)) {
-                $role->syncPermissions($request->permissions);
+            if(!empty($request->roles)) {
+                $permission->syncRoles($request->roles);
             }
-            return redirect()->route('roles.index')->with('success', 'Role created!');
+            return redirect()->route('permissions.index')->with('success', 'Permission created!');
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
-            return redirect()->back()->with('error', 'Error: Role not created!');
+            return redirect()->back()->with('error', 'Error: Permission not created!');
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
         //
     }
@@ -72,59 +72,59 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit(Permission $permission)
     {
         //
-        // return ;
-        $permissions = Permission::all();
-        $permissions_role = $role->permissions->pluck('id')->toArray();
-        return view('roles.edit', compact('permissions', 'role', 'permissions_role'));
+        // return $permission->roles;
+        $roles = Role::all();
+        $roles_permission = $permission->roles->pluck('id')->toArray();
+        return view('permissions.edit', compact('permission', 'roles', 'roles_permission'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Permission $permission)
     {
         //
-        // return $role;
+        // return $permission;
         // return $request;
         try {
-            $role->update([
+            $permission->update([
                 'name' => $request->name
             ]);
-            if(!empty($request->permissions)) {
-                $role->syncPermissions($request->permissions);
+            if(!empty($request->roles)) {
+                $permission->syncRoles($request->roles);
             }
-            return redirect()->route('roles.index')->with('success', 'Role updated!');
+            return redirect()->route('permissions.index')->with('success', 'Permission updated!');
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
-            return redirect()->back()->with('error', 'Error: Role not updated!');
+            return redirect()->back()->with('error', 'Error: Permission not updated!');
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy(Permission $permission)
     {
         //
         try {
-            $role->delete();
-            return redirect()->back()->with('success', 'Role deleted!');
+            $permission->delete();
+            return redirect()->back()->with('success', 'Permission deleted!');
         } catch (\Throwable $th) {
             Log::info($th->getMessage());
-            return redirect()->back()->with('error', 'Error: Role not deleted!');
+            return redirect()->back()->with('error', 'Error: Permission not deleted!');
         }
     }
 }

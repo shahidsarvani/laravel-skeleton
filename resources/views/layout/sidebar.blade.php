@@ -78,6 +78,22 @@
                         </span>
                     </a>
                 </li>
+                @can(['add-permission', 'edit-permission', 'delete-permission', 'view-permission'])
+                    <li class="nav-item nav-item-submenu @if (Route::is('permissions.*')) nav-item-open @endif">
+                        <a href="#" class="nav-link"><i class="icon-user-lock"></i> <span>Permissions</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Permissions"
+                            @if (Route::is('permissions.*')) style="display: block" @endif>
+                            @can('add-permission')
+                                <li class="nav-item"><a href="{{ route('permissions.create') }}"
+                                        class="nav-link @if (Route::is('permissions.create')) active @endif">Add Permission</a></li>
+                            @endcan
+                            @can(['edit-permission', 'delete-permission', 'view-permission'])
+                                <li class="nav-item"><a href="{{ route('permissions.index') }}"
+                                        class="nav-link @if (Route::is(['permissions.index', 'permissions.edit'])) active @endif">Permission List</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
                 @can(['add-role', 'edit-role', 'delete-role', 'view-role'])
                     <li class="nav-item nav-item-submenu @if (Route::is('roles.*')) nav-item-open @endif">
                         <a href="#" class="nav-link"><i class="icon-user-lock"></i> <span>Roles</span></a>
