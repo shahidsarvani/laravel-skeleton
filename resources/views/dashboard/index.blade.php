@@ -1,7 +1,7 @@
 @extends('layout.app')
 
 @section('title')
-    Dashboard | {{ env('APP_NAME') }}
+    Dashboard
 @endsection
 
 @section('content')

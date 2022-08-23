@@ -9,6 +9,7 @@ class DashboardController extends Controller
     //
     public function index()
     {
+        // return auth()->user()->roles->isEmpty();
         return view('dashboard.index');
     }
 }

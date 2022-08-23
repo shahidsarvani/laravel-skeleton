@@ -34,7 +34,7 @@
                     <div class="text-center">
                         <h6 class="mb-0 text-white text-shadow-dark mt-3">{{ auth()->user()->name }}</h6>
                         <span
-                            class="font-size-sm text-white text-shadow-dark">{{ ucfirst(auth()->user()->roles[0]->name) }}</span>
+                            class="font-size-sm text-white text-shadow-dark">{{ ucfirst(auth()->user()->roles->isNotEmpty() ? auth()->user()->roles[0]->name : '') }}</span>
                     </div>
                 </div>
 
@@ -54,7 +54,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('my-form').submit()">
+                        <a href="{{ route('logout') }}" class="nav-link"
+                            onclick="event.preventDefault(); document.getElementById('my-form').submit()">
                             <i class="icon-switch2"></i>
                             <span>Logout</span>
                         </a>
@@ -70,21 +71,29 @@
             <ul class="nav nav-sidebar" data-nav-type="accordion">
 
                 <li class="nav-item">
-                    <a href="index.html" class="nav-link active">
+                    <a href="{{ route('dashboard') }}" class="nav-link @if (Route::is('dashboard')) active @endif">
                         <i class="icon-home4"></i>
                         <span>
                             Dashboard
                         </span>
                     </a>
                 </li>
-                {{-- <li class="nav-item nav-item-submenu">
-							<a href="#" class="nav-link"><i class="icon-file-css"></i> <span>JSON forms</span></a>
-							<ul class="nav nav-group-sub" data-submenu-title="JSON forms">
-								<li class="nav-item"><a href="alpaca_basic.html" class="nav-link">Basic inputs</a></li>
-								<li class="nav-item"><a href="alpaca_advanced.html" class="nav-link">Advanced inputs</a></li>
-								<li class="nav-item"><a href="alpaca_controls.html" class="nav-link">Controls</a></li>
-							</ul>
-						</li> --}}
+                @can(['add-role', 'edit-role', 'delete-role', 'view-role'])
+                    <li class="nav-item nav-item-submenu @if (Route::is('roles.*')) nav-item-open @endif">
+                        <a href="#" class="nav-link"><i class="icon-user-lock"></i> <span>Roles</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Roles"
+                            @if (Route::is('roles.*')) style="display: block" @endif>
+                            @can('add-role')
+                                <li class="nav-item"><a href="{{ route('roles.create') }}"
+                                        class="nav-link @if (Route::is('roles.create')) active @endif">Add Role</a></li>
+                            @endcan
+                            @can(['edit-role', 'delete-role', 'view-role'])
+                                <li class="nav-item"><a href="{{ route('roles.index') }}"
+                                        class="nav-link @if (Route::is(['roles.index', 'roles.edit'])) active @endif">Role List</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
             </ul>
         </div>
         <!-- /main navigation -->

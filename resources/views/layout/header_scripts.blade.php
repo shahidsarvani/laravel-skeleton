@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@yield('title')</title>
+    <title>@yield('title') | {{ env('APP_NAME') }}</title>
 
     <!-- Global stylesheets -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
@@ -26,6 +26,7 @@
 
     <script src="{{ asset('assets/js/app.js') }}"></script>
     <script src="{{ asset('assets/global_assets/js/demo_pages/dashboard.js') }}"></script>
+    @yield('header_scripts')
     <!-- /theme JS files -->
     <style>
         .app-logo {
