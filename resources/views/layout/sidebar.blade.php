@@ -110,6 +110,22 @@
                         </ul>
                     </li>
                 @endcan
+                @can(['add-user', 'edit-user', 'delete-user', 'view-user'])
+                    <li class="nav-item nav-item-submenu @if (Route::is('users.*')) nav-item-open @endif">
+                        <a href="#" class="nav-link"><i class="icon-users"></i> <span>Users</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Users"
+                            @if (Route::is('users.*')) style="display: block" @endif>
+                            @can('add-user')
+                                <li class="nav-item"><a href="{{ route('users.create') }}"
+                                        class="nav-link @if (Route::is('users.create')) active @endif">Add User</a></li>
+                            @endcan
+                            @can(['edit-user', 'delete-user', 'view-user'])
+                                <li class="nav-item"><a href="{{ route('users.index') }}"
+                                        class="nav-link @if (Route::is(['users.index', 'users.edit'])) active @endif">User List</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
             </ul>
         </div>
         <!-- /main navigation -->
