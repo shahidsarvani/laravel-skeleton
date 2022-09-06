@@ -28,6 +28,18 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'delete-role'
             ],
+            [
+                'name' => 'add-permission'
+            ],
+            [
+                'name' => 'edit-permission'
+            ],
+            [
+                'name' => 'view-permission'
+            ],
+            [
+                'name' => 'delete-permission'
+            ],
         ];
         foreach($permissions as $item) {
             Permission::create($item);
