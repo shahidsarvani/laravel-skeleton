@@ -29,6 +29,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('permissions/crud_create', [PermissionController::class, 'crud_create'])->name('permissions.crud_create');
+    Route::post('permissions/crud_store', [PermissionController::class, 'crud_store'])->name('permissions.crud_store');
     Route::resource('permissions', PermissionController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

@@ -32,6 +32,12 @@ class PermissionController extends Controller
         $roles = Role::all();
         return view('permissions.create', compact('roles'));
     }
+    public function crud_create()
+    {
+        //
+        $roles = Role::all();
+        return view('permissions.crud_create', compact('roles'));
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -48,8 +54,35 @@ class PermissionController extends Controller
                 'name' => $request->name,
                 'guard_name' => 'web'
             ]);
-            if(!empty($request->roles)) {
+            if (!empty($request->roles)) {
                 $permission->syncRoles($request->roles);
+            }
+            return redirect()->route('permissions.index')->with('success', 'Permission created!');
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+            return redirect()->back()->with('error', 'Error: Permission not created!');
+        }
+    }
+    public function crud_store(Request $request)
+    {
+        //
+        // return $request;
+        try {
+            $name = $request->name;
+            $permissions = [
+                'add-' . $name,
+                'edit-' . $name,
+                'view-' . $name,
+                'delete-' . $name,
+            ];
+            foreach ($permissions as $value) {
+                $permission = Permission::create([
+                    'name' => $value,
+                    'guard_name' => 'web'
+                ]);
+                if (!empty($request->roles)) {
+                    $permission->syncRoles($request->roles);
+                }
             }
             return redirect()->route('permissions.index')->with('success', 'Permission created!');
         } catch (\Throwable $th) {
@@ -100,7 +133,7 @@ class PermissionController extends Controller
             $permission->update([
                 'name' => $request->name
             ]);
-            if(!empty($request->roles)) {
+            if (!empty($request->roles)) {
                 $permission->syncRoles($request->roles);
             }
             return redirect()->route('permissions.index')->with('success', 'Permission updated!');
